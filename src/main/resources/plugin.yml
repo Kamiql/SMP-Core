@@ -1,0 +1,22 @@
+name: SMP-Core
+version: 1.0.0
+main: de.kamiql.Main
+api-version: 1.21
+description: "Beschreibung"
+authors:
+  - "kamiql"
+dependencies:
+  server:
+    Vault:
+      load: BEFORE
+      required: true
+
+    LuckPerms:
+      load: BEFORE
+      required: true
+
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+
+load: POSTWORLD

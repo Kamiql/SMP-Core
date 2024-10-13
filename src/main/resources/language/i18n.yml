@@ -1,0 +1,32 @@
+defaultLocale: 'en'
+translations:
+  prefix:
+    de-de:
+      - '<#28AFFB>S<#2E8EFD>M<#336CFF>P'
+    en-us:
+      - '<#28AFFB>S<#2E8EFD>M<#336CFF>P'
+
+  join:
+    de-de:
+      - '<gray>[<green>+<gray>] {PLAYER}'
+    en-us:
+      - '<gray>[<green>+<gray>] {PLAYER}'
+
+  quit:
+    de-de:
+      - "<gray>[<red>+<gray>] {PLAYER}"
+    en-us:
+      - "<gray>[<red>+<gray>] {PLAYER}"
+
+  firstjoin:
+    de-de:
+      - "<gray>------------"
+      - "<yellow>Willkommen auf dem Server <aqua>{PLAYER}<yellow>!"
+      - "<yellow>Nr. <green>{COUNT}"
+      - "<gray>------------"
+    en-us:
+      - "<gray>------------"
+      - "<yellow>Welcome to the Server <aqua>{PLAYER}<yellow>!"
+      - "<yellow>Nr. <green>{COUNT}"
+      - "<gray>------------"
+

@@ -1,0 +1,4 @@
+economy:
+  enabled: true
+  name: "SMP-Economy"
+  currency-symbol: "€"
