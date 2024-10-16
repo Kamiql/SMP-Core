@@ -19,4 +19,27 @@ dependencies:
       load: BEFORE
       required: false
 
+commands:
+  balance:
+    description: "Take a look at your or other balances!"
+    permission: "smp-core.commands.balance"
+    aliases: ["bal", "kontostand"]
+
+  pay:
+    description: "Pay money to others!"
+    permission: "smp-core.commands.pay"
+
+  invsee:
+    description: "See player inventorys!"
+    permission: "smp-core.commands.invsee"
+    aliases: ["inventorysee", "isee"]
+
+  ec:
+    description: "See player enderchests!"
+    permission: "smp-core.commands.ec"
+    aliases: ["enderchest"]
+
+  clan:
+    permission: "smp-core.commands.clan"
+
 load: POSTWORLD

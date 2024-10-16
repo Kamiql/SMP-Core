@@ -14,9 +14,9 @@ translations:
 
   quit:
     de-de:
-      - "<gray>[<red>+<gray>] {PLAYER}"
+      - "<gray>[<red>-<gray>] {PLAYER}"
     en-us:
-      - "<gray>[<red>+<gray>] {PLAYER}"
+      - "<gray>[<red>-<gray>] {PLAYER}"
 
   firstjoin:
     de-de:
@@ -29,4 +29,70 @@ translations:
       - "<yellow>Welcome to the Server <aqua>{PLAYER}<yellow>!"
       - "<yellow>Nr. <green>{COUNT}"
       - "<gray>------------"
+
+  invalid_usage:
+    de-de:
+      - "<red>Ungültige Nutzung des Befehls!"
+    en-us:
+      - "<red>Invalid command usage!"
+
+  invalid_action:
+    de-de:
+      - "<red>Ungültige Aktion!"
+    en-us:
+      - "<red>Invalid action!"
+
+  invalid_amount:
+    de-de:
+      - "<red>Ungültiger Betrag!"
+    en-us:
+      - "<red>Invalid amount!"
+
+  own_balance:
+    de-de:
+      - "<yellow>Dein Kontostand beträgt <green>{BALANCE} $<yellow>."
+    en-us:
+      - "<yellow>Your balance is <green>{BALANCE} $<yellow>."
+
+  other_balance:
+    de-de:
+      - "<yellow>Der Kontostand von <green>{PLAYER}<yellow> beträgt <green>{BALANCE} $<yellow>."
+    en-us:
+      - "<yellow>The balance of <green>{PLAYER}<yellow> is <green>{BALANCE} $<yellow>."
+
+  player_not_found:
+    de-de:
+      - "<red>Der Spieler <yellow>{PLAYER} <red>wurde nicht gefunden."
+    en-us:
+      - "<red>Player <yellow>{PLAYER}<red> not found."
+
+  player_must_be_online:
+    de-de:
+      - "<red>Der Spieler <yellow>{PLAYER}<red> muss online sein!"
+    en-us:
+      - "<red>Player <yellow>{PLAYER}<red> must be online!"
+
+  payment_sent:
+    de-de:
+      - "<green>Du hast <yellow>{PLAYER} <green>{AMOUNT} $<green> geschickt."
+    en-us:
+      - "<green>You have sent <yellow>{AMOUNT} $ <green>to <yellow>{PLAYER}<green>."
+
+  payment_received:
+    de-de:
+      - "<green>Du hast <yellow>{AMOUNT} $ <green>von <yellow>{PLAYER}<green> erhalten."
+    en-us:
+      - "<green>You have received <yellow>{AMOUNT} $ <green>from <yellow>{PLAYER}<green>."
+
+  insufficient_funds:
+    de-de:
+      - "<red>Du hast nicht genug Geld!"
+    en-us:
+      - "<red>You don't have enough money!"
+
+  target_player_missing:
+    de-de:
+      - "<red>Du musst einen Zielspieler angeben!"
+    en-us:
+      - "<red>You need to specify a target player!"
 

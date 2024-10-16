@@ -1,8 +1,16 @@
 package de.kamiql;
 
 import de.kamiql.api.provider.CoreProvider;
-import de.kamiql.api.provider.i18n.I18nProvider;
+import de.kamiql.core.source.economy.commands.BalanceCommand;
+import de.kamiql.core.source.economy.commands.PayCommand;
+import de.kamiql.core.source.economy.listener.OnJoin;
 import de.kamiql.core.source.economy.provider.MyEconomy;
+import de.kamiql.core.source.guilds.commands.test;
+import de.kamiql.core.source.guilds.listener.GuildEvents;
+import de.kamiql.core.source.guilds.system.handler.GuildHandler;
+import de.kamiql.core.source.util.commands.inventory.EnderchestCommand;
+import de.kamiql.core.source.util.commands.inventory.InvseeCommand;
+import de.kamiql.core.source.util.modifikation.BadOmen;
 import de.kamiql.core.source.util.welcomer.Welcomer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -18,6 +26,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class Main extends JavaPlugin {
     private static JavaPlugin instance;
@@ -36,6 +45,8 @@ public class Main extends JavaPlugin {
 
             this.getServer().getServicesManager().register(CoreProvider.class, new CoreProvider(this), this, ServicePriority.Normal);
             this.getServer().getServicesManager().register(Economy.class, new MyEconomy(), this, ServicePriority.Normal);
+
+            GuildEvents.addListener(new GuildHandler());
         } catch (Exception e) {
             getLogger().severe(e::getMessage);
             getServer().getPluginManager().disablePlugin(this);
@@ -46,9 +57,9 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         try {
             this.setupProvider();
-            new I18nProvider(this);
 
-            getServer().getPluginManager().registerEvents(new Welcomer(), this);
+            registerCommands();
+            registerListener();
         } catch (Exception e) {
             getLogger().severe(e::getMessage);
             getServer().getPluginManager().disablePlugin(this);
@@ -57,7 +68,22 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        GuildEvents.removeListener(new GuildHandler());
+    }
 
+    private void registerCommands() {
+        Objects.requireNonNull(getCommand("balance")).setExecutor(new BalanceCommand());
+        Objects.requireNonNull(getCommand("pay")).setExecutor(new PayCommand());
+        Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand());
+        Objects.requireNonNull(getCommand("ec")).setExecutor(new EnderchestCommand());
+    }
+
+    private void registerListener() {
+        getServer().getPluginManager().registerEvents(new Welcomer(), this);
+        getServer().getPluginManager().registerEvents(new OnJoin(), this);
+        getServer().getPluginManager().registerEvents(new EnderchestCommand(), this);
+        getServer().getPluginManager().registerEvents(new InvseeCommand(), this);
+        getServer().getPluginManager().registerEvents(new BadOmen(), this);
     }
 
     private void setupProvider() {
@@ -92,7 +118,8 @@ public class Main extends JavaPlugin {
     private void setupConfigFiles() {
         List<String> configurations = List.of(
             "language/i18n.yml",
-            "economy/settings.yml"
+            "economy/settings.yml",
+            "config.yml"
         );
 
         for (String child : configurations) {

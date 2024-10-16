@@ -43,7 +43,7 @@ public class Welcomer implements Listener {
         if (event.getPlayer() instanceof Player player) {
             new I18n.Builder("quit", player)
                     .hasPrefix(false)
-                    .withPlaceholder("{PLAYER}", player.getName())
+                    .withPlaceholder("PLAYER", player.getName())
                     .build()
                     .sendMessageAsComponent(true);
         }

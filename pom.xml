@@ -116,6 +116,7 @@
                                         <include>plugin.yml</include>
                                         <include>language/**</include>
                                         <include>economy/settings.yml</include>
+                                        <include>config.yml</include>
                                     </includes>
                                     <excludes>
                                         <exclude>com/github/MilkBowl/**</exclude>
