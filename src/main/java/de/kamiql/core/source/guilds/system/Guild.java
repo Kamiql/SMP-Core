@@ -1,8 +1,7 @@
 package de.kamiql.core.source.guilds.system;
 
-import de.kamiql.core.source.guilds.listener.events.*;
 import de.kamiql.core.source.guilds.listener.GuildEvents;
-import net.kyori.adventure.text.Component;
+import de.kamiql.core.source.guilds.listener.events.*;
 import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

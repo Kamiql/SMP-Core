@@ -19,20 +19,20 @@ public class Welcomer implements Listener {
                         .withPlaceholder("PLAYER", player.getName())
                         .withPlaceholder("COUNT", 1)
                         .build()
-                        .sendMessageAsComponent(true);
+                        .broadcastMessageAsComponent();
 
                 new I18n.Builder("join", player)
                         .hasPrefix(false)
                         .withPlaceholder("PLAYER", player.getName())
                         .build()
-                        .sendMessageAsComponent(true);
+                        .broadcastMessageAsComponent();
 
             } else {
                 new I18n.Builder("join", player)
                         .hasPrefix(false)
                         .withPlaceholder("PLAYER", player.getName())
                         .build()
-                        .sendMessageAsComponent(true);
+                        .broadcastMessageAsComponent();
             }
         }
     }
@@ -45,7 +45,7 @@ public class Welcomer implements Listener {
                     .hasPrefix(false)
                     .withPlaceholder("PLAYER", player.getName())
                     .build()
-                    .sendMessageAsComponent(true);
+                    .broadcastMessageAsComponent();
         }
     }
 }

@@ -31,7 +31,7 @@ public class BalanceCommand implements TabExecutor {
                     .hasPrefix(true)
                     .withPlaceholder("BALANCE", balance)
                     .build()
-                    .sendMessageAsComponent(false);
+                    .sendMessageAsComponent();
             return true;
         }
 
@@ -43,7 +43,7 @@ public class BalanceCommand implements TabExecutor {
                         .hasPrefix(true)
                         .withPlaceholder("PLAYER", args[0])
                         .build()
-                        .sendMessageAsComponent(false);
+                        .sendMessageAsComponent();
                 return true;
             }
 
@@ -53,11 +53,11 @@ public class BalanceCommand implements TabExecutor {
                     .withPlaceholder("PLAYER", targetPlayer.getName())
                     .withPlaceholder("BALANCE", balance)
                     .build()
-                    .sendMessageAsComponent(false);
+                    .sendMessageAsComponent();
             return true;
         }
 
-        new I18n.Builder("invalid_usage", player).hasPrefix(true).build().sendMessageAsComponent(false);
+        new I18n.Builder("invalid_usage", player).hasPrefix(true).build().sendMessageAsComponent();
         return false;
     }
 

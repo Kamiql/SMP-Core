@@ -28,7 +28,7 @@ public class I18n {
         this.placeholders = builder.placeholders;
     }
 
-    public void sendMessageAsComponent(Boolean broadcast) {
+    public void sendMessageAsComponent() {
         String message = getMessage();
         if (hasPrefix) {
             String prefix = customPrefix != null ? customPrefix : getPrefix();
@@ -36,11 +36,18 @@ public class I18n {
         }
         Component component = MiniMessage.miniMessage().deserialize(message);
 
-        if (broadcast) {
-            for (Player player : Bukkit.getOnlinePlayers()) {
-                player.sendMessage(component);
-            }
-        } else {
+        player.sendMessage(component);
+    }
+
+    public void broadcastMessageAsComponent() {
+        String message = getMessage();
+        if (hasPrefix) {
+            String prefix = customPrefix != null ? customPrefix : getPrefix();
+            message = prefix + " " + message;
+        }
+        Component component = MiniMessage.miniMessage().deserialize(message);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
             player.sendMessage(component);
         }
     }

@@ -24,7 +24,7 @@ public class PayCommand implements TabExecutor {
         }
 
         if (args.length != 2) {
-            new I18n.Builder("invalid_usage", player).hasPrefix(true).build().sendMessageAsComponent(false);
+            new I18n.Builder("invalid_usage", player).hasPrefix(true).build().sendMessageAsComponent();
             return false;
         }
 
@@ -35,7 +35,7 @@ public class PayCommand implements TabExecutor {
                     .hasPrefix(true)
                     .withPlaceholder("PLAYER", args[0])
                     .build()
-                    .sendMessageAsComponent(false);
+                    .sendMessageAsComponent();
             return true;
         }
 
@@ -46,14 +46,14 @@ public class PayCommand implements TabExecutor {
                 new I18n.Builder("invalid_amount", player)
                         .hasPrefix(true)
                         .build()
-                        .sendMessageAsComponent(false);
+                        .sendMessageAsComponent();
                 return true;
             }
         } catch (NumberFormatException e) {
             new I18n.Builder("invalid_amount", player)
                     .hasPrefix(true)
                     .build()
-                    .sendMessageAsComponent(false);
+                    .sendMessageAsComponent();
             return true;
         }
 
@@ -61,7 +61,7 @@ public class PayCommand implements TabExecutor {
             new I18n.Builder("insufficient_funds", player)
                     .hasPrefix(true)
                     .build()
-                    .sendMessageAsComponent(false);
+                    .sendMessageAsComponent();
             return true;
         }
 
@@ -73,14 +73,14 @@ public class PayCommand implements TabExecutor {
                 .withPlaceholder("PLAYER", targetPlayer.getName())
                 .withPlaceholder("AMOUNT", amount)
                 .build()
-                .sendMessageAsComponent(false);
+                .sendMessageAsComponent();
 
         new I18n.Builder("payment_received", targetPlayer)
                 .hasPrefix(true)
                 .withPlaceholder("PLAYER", player.getName())
                 .withPlaceholder("AMOUNT", amount)
                 .build()
-                .sendMessageAsComponent(false);
+                .sendMessageAsComponent();
 
         return true;
     }

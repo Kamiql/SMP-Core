@@ -42,4 +42,16 @@ commands:
   clan:
     permission: "smp-core.commands.clan"
 
+  rename:
+    description: "Rename items!"
+    permission: "smp-core.commands.rename"
+    aliases: ["renameitem", "umbenenn"]
+
+  sign:
+    description: "Sign items!"
+    permission: "smp-core.commands.sign"
+    aliases: ["signieren"]
+
+  vanish:
+    permission: "smp-core.commands.vanish"
 load: POSTWORLD

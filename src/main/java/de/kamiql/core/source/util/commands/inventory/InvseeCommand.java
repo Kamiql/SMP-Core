@@ -7,8 +7,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +35,7 @@ public class InvseeCommand implements Listener, TabExecutor {
                         .withPlaceholder("PLAYER", args[0])
                         .hasPrefix(true)
                         .build()
-                        .sendMessageAsComponent(false);
+                        .sendMessageAsComponent();
                 return true;
             }
             player.openInventory(target.getInventory());
@@ -44,7 +44,7 @@ public class InvseeCommand implements Listener, TabExecutor {
             new I18n.Builder("target_player_missing", player)
                     .hasPrefix(true)
                     .build()
-                    .sendMessageAsComponent(false);
+                    .sendMessageAsComponent();
         }
 
         return false;

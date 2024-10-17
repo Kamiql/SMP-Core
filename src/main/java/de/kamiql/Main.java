@@ -5,12 +5,14 @@ import de.kamiql.core.source.economy.commands.BalanceCommand;
 import de.kamiql.core.source.economy.commands.PayCommand;
 import de.kamiql.core.source.economy.listener.OnJoin;
 import de.kamiql.core.source.economy.provider.MyEconomy;
-import de.kamiql.core.source.guilds.commands.test;
 import de.kamiql.core.source.guilds.listener.GuildEvents;
 import de.kamiql.core.source.guilds.system.handler.GuildHandler;
 import de.kamiql.core.source.util.commands.inventory.EnderchestCommand;
 import de.kamiql.core.source.util.commands.inventory.InvseeCommand;
-import de.kamiql.core.source.util.modifikation.BadOmen;
+import de.kamiql.core.source.util.commands.item.RenameCommand;
+import de.kamiql.core.source.util.commands.item.SignCommand;
+import de.kamiql.core.source.util.commands.player.VanishCommand;
+import de.kamiql.core.source.util.modifikation.effect.BadOmen;
 import de.kamiql.core.source.util.welcomer.Welcomer;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -76,6 +78,9 @@ public class Main extends JavaPlugin {
         Objects.requireNonNull(getCommand("pay")).setExecutor(new PayCommand());
         Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand());
         Objects.requireNonNull(getCommand("ec")).setExecutor(new EnderchestCommand());
+        Objects.requireNonNull(getCommand("sign")).setExecutor(new SignCommand());
+        Objects.requireNonNull(getCommand("rename")).setExecutor(new RenameCommand());
+        Objects.requireNonNull(getCommand("vanish")).setExecutor(new VanishCommand());
     }
 
     private void registerListener() {

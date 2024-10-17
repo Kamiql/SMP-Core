@@ -1,7 +1,8 @@
-package de.kamiql.core.source.util.modifikation;
+package de.kamiql.core.source.util.modifikation.effect;
 
 import de.kamiql.Main;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Raid;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -70,23 +71,50 @@ public class BadOmen implements Listener {
                     int newDuration = random.nextInt(120000) + 6000;
                     int newAmplifier = random.nextInt(5);
 
-                    if (killer.hasPotionEffect(PotionEffectType.BAD_OMEN)) {
-                        PotionEffect currentEffect = killer.getPotionEffect(PotionEffectType.BAD_OMEN);
-                        int currentDuration = currentEffect.getDuration();
-                        int currentAmplifier = currentEffect.getAmplifier();
+                    if (!isRaidActive(killer)) {
+                        killer.sendMessage("1");
+                        if (killer.hasPotionEffect(PotionEffectType.BAD_OMEN)) {
+                            PotionEffect currentEffect = killer.getPotionEffect(PotionEffectType.BAD_OMEN);
+                            int currentDuration = currentEffect.getDuration();
+                            int currentAmplifier = currentEffect.getAmplifier();
 
-                        int finalDuration = Math.min(currentDuration + newDuration, 120000);
-                        int finalAmplifier = Math.min(currentAmplifier + newAmplifier + 1, 5);
+                            int finalDuration = Math.min(currentDuration + newDuration, 120000);
+                            int finalAmplifier = Math.min(currentAmplifier + newAmplifier, 5);
 
-                        killer.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, finalDuration, finalAmplifier));
-                    } else {
-                        killer.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, newDuration, newAmplifier));
+                            killer.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, finalDuration, finalAmplifier));
+                        } else {
+                            killer.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, newDuration, newAmplifier));
+                        }
+                    } else if (isRaidWon(killer) || isRaidLoss(killer) || isRaidStopped(killer)){
+                        killer.sendMessage("2");
+                        int finalAmplifier = Math.min(killer.getWorld().locateNearestRaid(killer.getLocation(), 128).getBadOmenLevel() + 1, 5);
+                        killer.addPotionEffect(new PotionEffect(PotionEffectType.BAD_OMEN, 120000, finalAmplifier));
                     }
                 }
             }
         }
     }
-    
+
+    private boolean isRaidActive(Player player) {
+        Raid raid = player.getWorld().locateNearestRaid(player.getLocation(), 128);
+        return raid != null && raid.getStatus() == Raid.RaidStatus.ONGOING;
+    }
+
+    private boolean isRaidWon(Player player) {
+        Raid raid = player.getWorld().locateNearestRaid(player.getLocation(), 128);
+        return raid != null && raid.getStatus() == Raid.RaidStatus.VICTORY;
+    }
+
+    private boolean isRaidLoss(Player player) {
+        Raid raid = player.getWorld().locateNearestRaid(player.getLocation(), 128);
+        return raid != null && raid.getStatus() == Raid.RaidStatus.LOSS;
+    }
+
+    private boolean isRaidStopped(Player player) {
+        Raid raid = player.getWorld().locateNearestRaid(player.getLocation(), 128);
+        return raid != null && raid.getStatus() == Raid.RaidStatus.STOPPED;
+    }
+
     private boolean isBadOmenEnabled() {
         return Main.getConfiguration("config").getBoolean("modifications.BadOmenToggle", false);
     }

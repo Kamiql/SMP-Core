@@ -1,7 +1,6 @@
 package de.kamiql.core.source.guilds.listener.events;
 
 import de.kamiql.core.source.guilds.system.Guild;
-import org.bukkit.entity.HumanEntity;
 import org.jetbrains.annotations.NotNull;
 
 public class GuildCreateEvent {
