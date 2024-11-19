@@ -1,0 +1,351 @@
+defaultLocale: 'en'
+
+prefix:
+  - '<#28AFFB>S<#2E8EFD>M<#336CFF>P<white>'
+
+translations:
+  commands:
+    economy:
+      pay_command:
+        insufficient_amount:
+          de-de:
+            - "<red>Ungültiger Geldbetrag! Bitte wähle einen Wert über 0."
+          en-us:
+            - "<red>insufficient amount! Please choose a value over 0."
+
+        target_not_found:
+          de-de:
+            - "<red>Der Spieler <yellow>{PLAYER} <red>ist nicht online oder wurde nicht gefunden."
+          en-us:
+            - "<red>The player <yellow>{PLAYER} <red>is not online or could not be found."
+
+        not_enough_money:
+          de-de:
+            - "<red>Du hast nicht genug Geld."
+          en-us:
+            - "<red>You do not have enough money."
+
+        success:
+          de-de:
+            - "<green>Du hast <yellow>{AMOUNT} {TYPE} <green>an <yellow>{PLAYER} <green>gezahlt!"
+          en-us:
+            - "<green>You paid <yellow>{AMOUNT} {TYPE} <green>to <yellow>{PLAYER}!"
+
+        no_account:
+          de-de:
+            - "<red>Der Spieler <yellow>{PLAYER} <red>hat kein Konto."
+          en-us:
+            - "<red>The player <yellow>{PLAYER} <red>has no account."
+
+        success_sender:
+          de-de:
+            - "<green>Du hast <yellow>{AMOUNT} {TYPE} <green>von <yellow>{PLAYER} <green>erhalten!"
+          en-us:
+            - "<green>You received <yellow>{AMOUNT} {TYPE} <green>from <yellow>{PLAYER}!"
+
+      balance_command:
+        gems_self:
+          de-de:
+            - "<green>Du hast <yellow>{AMOUNT} <green>Edelsteine."
+          en-us:
+            - "<green>You have <yellow>{AMOUNT} <green>gems."
+
+        gems_other:
+          de-de:
+            - "<yellow>{PLAYER} <green>hat <yellow>{AMOUNT} <green>Edelsteine."
+          en-us:
+            - "<yellow>{PLAYER} <green>has <yellow>{AMOUNT} <green>gems."
+
+        money_self:
+          de-de:
+            - "<green>Du hast <yellow>{AMOUNT} <green>Geld."
+          en-us:
+            - "<green>You have <yellow>{AMOUNT} <green>money."
+
+        money_other:
+          de-de:
+            - "<yellow>{PLAYER} <green>hat <yellow>{AMOUNT} <green>Geld."
+          en-us:
+            - "<yellow>{PLAYER} <green>has <yellow>{AMOUNT} <green>money."
+
+      eco_command:
+        usage:
+          de-de:
+            - "<red>Benutzung: <yellow>/eco <money|gems>"
+          en-us:
+            - "<red>Usage: <yellow>/eco <money|gems>"
+        usage_money:
+          de-de:
+            - "<red>Benutzung: <yellow>/eco money <player> <add|withdraw|set|reset|balance>"
+          en-us:
+            - "<red>Usage: <yellow>/eco money <player> <add|withdraw|set|reset|balance>"
+        usage_gems:
+          de-de:
+            - "<red>Benutzung: <yellow>/eco gems <player> <add|withdraw|set|reset|balance>"
+          en-us:
+            - "<red>Usage: <yellow>/eco gems <player> <add|withdraw|set|reset|balance>"
+        unknown_command_money:
+          de-de:
+            - "<red>Unbekannter Befehl. <yellow>Benutzung: /eco money <add|withdraw|set|reset|balance>"
+          en-us:
+            - "<red>Unknown command. <yellow>Usage: /eco money <add|withdraw|set|reset|balance>"
+        unknown_command_gems:
+          de-de:
+            - "<red>Unbekannter Befehl. <yellow>Benutzung: /eco gems <add|withdraw|set|reset|balance>"
+          en-us:
+            - "<red>Unknown command. <yellow>Usage: /eco gems <add|withdraw|set|reset|balance>"
+
+        money:
+          add:
+            sender:
+              de-de:
+                - "<green>Erfolgreich <yellow>{AMOUNT} <green>Geld zu <yellow>{PLAYER} <green>hinzugefügt."
+              en-us:
+                - "<green>Successfully added <yellow>{AMOUNT} <green>money to <yellow>{PLAYER}."
+            target:
+              de-de:
+                - "<green>Du hast <yellow>{AMOUNT} <green>Geld erhalten."
+              en-us:
+                - "<green>You received <yellow>{AMOUNT} <green>money."
+          withdraw:
+            sender_success:
+              de-de:
+                - "<green>Erfolgreich <yellow>{AMOUNT} <green>Geld von <yellow>{PLAYER} <green>abgehoben."
+              en-us:
+                - "<green>Successfully withdrew <yellow>{AMOUNT} <green>money from <yellow>{PLAYER}."
+            sender_fail:
+              de-de:
+                - "<red>Nicht genügend Geld zum Abheben."
+              en-us:
+                - "<red>Insufficient funds to withdraw."
+            target:
+              de-de:
+                - "<green>Du hast <yellow>{AMOUNT} <green>Geld abgehoben."
+              en-us:
+                - "<green>You withdrew <yellow>{AMOUNT} <green>money."
+          set:
+            sender:
+              de-de:
+                - "<green>Erfolgreich den Geldbetrag von <yellow>{PLAYER} <green>auf <yellow>{AMOUNT} <green>gesetzt."
+              en-us:
+                - "<green>Successfully set <yellow>{PLAYER}'s <green>money to <yellow>{AMOUNT}."
+            target:
+              de-de:
+                - "<green>Dein Geld wurde auf <yellow>{AMOUNT} <green>gesetzt."
+              en-us:
+                - "<green>Your money has been set to <yellow>{AMOUNT}."
+          reset:
+            sender:
+              de-de:
+                - "<green>Erfolgreich das Geld von <yellow>{PLAYER} <green>zurückgesetzt."
+              en-us:
+                - "<green>Successfully reset <yellow>{PLAYER}'s <green>money."
+            target:
+              de-de:
+                - "<green>Dein Geld wurde zurückgesetzt."
+              en-us:
+                - "<green>Your money has been reset."
+          balance:
+            sender_other:
+              de-de:
+                - "<yellow>{PLAYER}'s <green>Kontostand: <yellow>{BALANCE}"
+              en-us:
+                - "<yellow>{PLAYER}'s <green>balance: <yellow>{BALANCE}"
+            sender_self:
+              de-de:
+                - "<green>Dein Kontostand: <yellow>{BALANCE}"
+              en-us:
+                - "<green>Your balance: <yellow>{BALANCE}"
+
+        gems:
+          add:
+            sender:
+              de-de:
+                - "<green>Erfolgreich <yellow>{AMOUNT} <green>Edelsteine zu <yellow>{PLAYER} <green>hinzugefügt."
+              en-us:
+                - "<green>Successfully added <yellow>{AMOUNT} <green>gems to <yellow>{PLAYER}."
+            target:
+              de-de:
+                - "<green>Du hast <yellow>{AMOUNT} <green>Edelsteine erhalten."
+              en-us:
+                - "<green>You received <yellow>{AMOUNT} <green>gems."
+          withdraw:
+            sender_success:
+              de-de:
+                - "<green>Erfolgreich <yellow>{AMOUNT} <green>Edelsteine von <yellow>{PLAYER} <green>abgehoben."
+              en-us:
+                - "<green>Successfully withdrew <yellow>{AMOUNT} <green>gems from <yellow>{PLAYER}."
+            sender_fail:
+              de-de:
+                - "<red>Nicht genügend Edelsteine zum Abheben."
+              en-us:
+                - "<red>Insufficient gems to withdraw."
+            target:
+              de-de:
+                - "<green>Du hast <yellow>{AMOUNT} <green>Edelsteine abgehoben."
+              en-us:
+                - "<green>You withdrew <yellow>{AMOUNT} <green>gems."
+          set:
+            sender:
+              de-de:
+                - "<green>Erfolgreich den Edelsteinbetrag von <yellow>{PLAYER} <green>auf <yellow>{AMOUNT} <green>gesetzt."
+              en-us:
+                - "<green>Successfully set <yellow>{PLAYER}'s <green>gems to <yellow>{AMOUNT}."
+            target:
+              de-de:
+                - "<green>Deine Edelsteine wurden auf <yellow>{AMOUNT} <green>gesetzt."
+              en-us:
+                - "<green>Your gems have been set to <yellow>{AMOUNT}."
+          reset:
+            sender:
+              de-de:
+                - "<green>Erfolgreich die Edelsteine von <yellow>{PLAYER} <green>zurückgesetzt."
+              en-us:
+                - "<green>Successfully reset <yellow>{PLAYER}'s <green>gems."
+            target:
+              de-de:
+                - "<green>Deine Edelsteine wurden zurückgesetzt."
+              en-us:
+                - "<green>Your gems have been reset."
+          balance:
+            sender_other:
+              de-de:
+                - "<yellow>{PLAYER}'s <green>Edelstein-Kontostand: <yellow>{BALANCE}"
+              en-us:
+                - "<yellow>{PLAYER}'s <green>gem balance: <yellow>{BALANCE}"
+            sender_self:
+              de-de:
+                - "<green>Dein Edelstein-Kontostand: <yellow>{BALANCE}"
+              en-us:
+                - "<green>Your gem balance: <yellow>{BALANCE}"
+
+      balTop_command:
+        top5:
+          de-de:
+            - "<reset><gray>========< <yellow><bold>TOP LISTE <reset><gray>>========"
+            - "<reset><gray>Gesamt: <green>{TOTAL}"
+            - "<reset><yellow>Top 5:"
+            - "<reset>{TOP5}"
+            - "<reset><gray>========< <yellow><bold>TOP LISTE <reset><gray>>========"
+          en-us:
+            - "<reset><gray>========< <yellow><bold>BALTOP <reset><gray>>========"
+            - "<reset><gray>Total: <green>{TOTAL}"
+            - "<reset><yellow>Top 5:"
+            - "<reset>{TOP5}"
+            - "<reset><gray>========< <yellow><bold>BALTOP <reset><gray>>========"
+
+    sign_command:
+      success:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+      not_owner:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+      no_item:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+      not_enough_xp:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+    rename_command:
+      no_item:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+      not_enough_xp:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+      success:
+        de-de:
+          - ""
+        en-us:
+          - ""
+
+  misc:
+    invalid_usage:
+      de-de:
+        - "<red>Ungültige Nutzung des Befehls! {ALIAS}"
+      en-us:
+        - "<red>Invalid command usage! {ALIAS}"
+
+    no_permission:
+      de-de:
+        - "<red>Sorry, aber dir fehlt die Permission: <yellow>{PERMISSION}"
+      en-us:
+        - "<red>Sorry! But you lack permission: <yellow>{PERMISSION}"
+
+  chat_formater:
+    invalid_usage:
+      de-de:
+        - "<white>Du kannst <aqua>[item] <white>nur verwenden, wenn du ein Item in der Hand hälst!"
+      en-us:
+        - "<white>You can only use <aqua>[item]<white>, when you maintain a item in your main hand!"
+
+  rewards:
+    received:
+      de-de:
+        - "============================="
+        - "<green><bold>Belohnung erreicht:</bold></green>"
+        - "<gray>Rang: <yellow>{RANK}</yellow></gray>"
+        - ""
+        - "<gray>Geld: <gold>{MONEY}</gold></gray>"
+        - "<gray>Gems: <green>{GEMS}</green></gray>"
+        - ""
+        - "<gray>Permissions: <yellow>{PERMISSIONS}</yellow></gray>"
+        - "============================="
+      en-us:
+        - "============================="
+        - "<green><bold>Reward received:</bold></green>"
+        - "<gray>Rank: <yellow>{RANK}</yellow></gray>"
+        - ""
+        - "<gray>Money: <gold>{MONEY}</gold></gray>"
+        - "<gray>Gems: <green>{GEMS}</green></gray>"
+        - ""
+        - "<gray>Permissions: <yellow>{PERMISSIONS}</yellow></gray>"
+        - "============================="
+
+
+  welcomer:
+    join:
+      de-de:
+        - '<gray>[<green>+<gray>] {PLAYER}'
+      en-us:
+        - '<gray>[<green>+<gray>] {PLAYER}'
+
+    quit:
+      de-de:
+        - "<gray>[<red>-<gray>] {PLAYER}"
+      en-us:
+        - "<gray>[<red>-<gray>] {PLAYER}"
+
+    firstjoin:
+      de-de:
+        - "<gray>------------"
+        - "<yellow>Willkommen auf dem Server <aqua>{PLAYER}<yellow>!"
+        - "<yellow>Nr. <green>{COUNT}"
+        - "<gray>------------"
+      en-us:
+        - "<gray>------------"
+        - "<yellow>Welcome to the Server <aqua>{PLAYER}<yellow>!"
+        - "<yellow>Nr. <green>{COUNT}"
+        - "<gray>------------"
+
+
+

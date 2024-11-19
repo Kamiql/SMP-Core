@@ -1,21 +1,27 @@
 package de.kamiql;
 
-import de.kamiql.api.provider.CoreProvider;
+import de.kamiql.core.source.economy.commands.BalTopCommand;
 import de.kamiql.core.source.economy.commands.BalanceCommand;
+import de.kamiql.core.source.economy.commands.EconomyCommand;
 import de.kamiql.core.source.economy.commands.PayCommand;
-import de.kamiql.core.source.economy.listener.OnJoin;
-import de.kamiql.core.source.economy.provider.MyEconomy;
-import de.kamiql.core.source.guilds.listener.GuildEvents;
-import de.kamiql.core.source.guilds.system.handler.GuildHandler;
-import de.kamiql.core.source.util.commands.inventory.EnderchestCommand;
-import de.kamiql.core.source.util.commands.inventory.InvseeCommand;
-import de.kamiql.core.source.util.commands.item.RenameCommand;
-import de.kamiql.core.source.util.commands.item.SignCommand;
-import de.kamiql.core.source.util.commands.player.VanishCommand;
-import de.kamiql.core.source.util.modifikation.effect.BadOmen;
-import de.kamiql.core.source.util.welcomer.Welcomer;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import de.kamiql.core.source.economy.custom.gemstones.econ.MyGemstones;
+import de.kamiql.core.source.economy.custom.gemstones.econ.Gemstones;
+import de.kamiql.core.source.economy.listener.CreatePlayerAccounts;
+import de.kamiql.core.source.economy.vault.econ.MyEconomy;
+import de.kamiql.core.source.util.commands.player.item.RenameCommand;
+import de.kamiql.core.source.util.commands.player.item.SignCommand;
+import de.kamiql.core.source.util.commands.player.misc.EcCommand;
+import de.kamiql.core.source.util.commands.player.misc.InvseeCommand;
+import de.kamiql.core.source.util.commands.player.misc.WorkUtil;
+import de.kamiql.core.source.util.commands.staff.misc.VanishCommand;
+import de.kamiql.core.source.util.modification.chat.ChatFormater;
+import de.kamiql.core.source.util.modification.chat.Welcomer;
+import de.kamiql.core.source.util.modification.chestshop.handler.ChestShopHandler;
+import de.kamiql.core.source.util.modification.rewards.TimeRewards;
+import de.kamiql.core.toolkit.extension.invframework.GUI;
+import de.kamiql.core.toolkit.extension.invframework.GUIListener;
+import de.kamiql.core.toolkit.extension.papi.SMPcorePlaceholderExtension;
+import de.kamiql.i18n.api.provider.I18nProvider;
 import net.luckperms.api.LuckPerms;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -23,32 +29,27 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class Main extends JavaPlugin {
     private static JavaPlugin instance;
 
     private static Economy econ;
+    private static Gemstones gems;
     private static LuckPerms luckPerms;
-    private static CoreProvider core;
-
-    private static final HashMap<String, YamlConfiguration> configurations = new HashMap<>();
 
     @Override
     public void onLoad() {
         try {
             instance = this;
-            this.setupConfigFiles();
-
-            this.getServer().getServicesManager().register(CoreProvider.class, new CoreProvider(this), this, ServicePriority.Normal);
-            this.getServer().getServicesManager().register(Economy.class, new MyEconomy(), this, ServicePriority.Normal);
-
-            GuildEvents.addListener(new GuildHandler());
+            this.getDataFolder().mkdirs();
+            this.getServer().getServicesManager().register(Economy.class, new MyEconomy(), this, ServicePriority.Highest);
+            this.getServer().getServicesManager().register(Gemstones.class, new MyGemstones(), this, ServicePriority.Highest);
         } catch (Exception e) {
             getLogger().severe(e::getMessage);
             getServer().getPluginManager().disablePlugin(this);
@@ -58,10 +59,17 @@ public class Main extends JavaPlugin {
     @Override
     public void onEnable() {
         try {
+            new ChestShopHandler().setupDatabase();
+
+            new I18nProvider(this, getConfig("server/language/i18n.yml"));
+
             this.setupProvider();
 
             registerCommands();
             registerListener();
+            registerPapiExtension();
+
+            new TimeRewards().start();
         } catch (Exception e) {
             getLogger().severe(e::getMessage);
             getServer().getPluginManager().disablePlugin(this);
@@ -70,25 +78,33 @@ public class Main extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        GuildEvents.removeListener(new GuildHandler());
+
+    }
+
+    private void registerPapiExtension() {
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            new SMPcorePlaceholderExtension().register();
+        }
     }
 
     private void registerCommands() {
-        Objects.requireNonNull(getCommand("balance")).setExecutor(new BalanceCommand());
-        Objects.requireNonNull(getCommand("pay")).setExecutor(new PayCommand());
-        Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand());
-        Objects.requireNonNull(getCommand("ec")).setExecutor(new EnderchestCommand());
         Objects.requireNonNull(getCommand("sign")).setExecutor(new SignCommand());
         Objects.requireNonNull(getCommand("rename")).setExecutor(new RenameCommand());
         Objects.requireNonNull(getCommand("vanish")).setExecutor(new VanishCommand());
+        Objects.requireNonNull(getCommand("eco")).setExecutor(new EconomyCommand());
+        Objects.requireNonNull(getCommand("balTop")).setExecutor(new BalTopCommand());
+        Objects.requireNonNull(getCommand("balance")).setExecutor(new BalanceCommand());
+        Objects.requireNonNull(getCommand("pay")).setExecutor(new PayCommand());
+        Objects.requireNonNull(getCommand("workutil")).setExecutor(new WorkUtil());
+        Objects.requireNonNull(getCommand("invsee")).setExecutor(new InvseeCommand());
     }
 
     private void registerListener() {
         getServer().getPluginManager().registerEvents(new Welcomer(), this);
-        getServer().getPluginManager().registerEvents(new OnJoin(), this);
-        getServer().getPluginManager().registerEvents(new EnderchestCommand(), this);
-        getServer().getPluginManager().registerEvents(new InvseeCommand(), this);
-        getServer().getPluginManager().registerEvents(new BadOmen(), this);
+        getServer().getPluginManager().registerEvents(new CreatePlayerAccounts(), this);
+        getServer().getPluginManager().registerEvents(new ChatFormater(), this);
+        getServer().getPluginManager().registerEvents(new ChestShopHandler(), this);
+        getServer().getPluginManager().registerEvents(new GUIListener(), this);
     }
 
     private void setupProvider() {
@@ -97,7 +113,7 @@ public class Main extends JavaPlugin {
             try {
                 econ = rsp.getProvider();
             } catch (Exception e) {
-                getLogger().severe(String.format(" - Disabled due to no Vault provider found!", getDescription().getName()));
+                this.getLogger().severe(String.format(" - Disabled due to no Vault provider found!", getDescription().getName()));
             }
         }
 
@@ -106,47 +122,37 @@ public class Main extends JavaPlugin {
             try {
                 luckPerms = provider.getProvider();
             } catch (Exception e) {
-                getLogger().severe(String.format(" - Disabled due to no LuckPerms provider found!", getDescription().getName()));
+                this.getLogger().severe(String.format(" - Disabled due to no LuckPerms provider found!", getDescription().getName()));
             }
         }
 
-        RegisteredServiceProvider<CoreProvider> coreProvider = getServer().getServicesManager().getRegistration(CoreProvider.class);
-        if (core != null) {
+        RegisteredServiceProvider<Gemstones> gemstones = getServer().getServicesManager().getRegistration(Gemstones.class);
+        if (gemstones != null) {
             try {
-                core = coreProvider.getProvider();
+                gems = gemstones.getProvider();
             } catch (Exception e) {
-                getLogger().severe(String.format(" - Disabled due to no Core provider found!", getDescription().getName()));
+                this.getLogger().severe(String.format(" - Disabled due to no Gemstones provider found!", getDescription().getName()));
             }
         }
     }
 
-    private void setupConfigFiles() {
-        List<String> configurations = List.of(
-            "language/i18n.yml",
-            "economy/settings.yml",
-            "config.yml"
-        );
+    public static YamlConfiguration getConfig(String path) {
+        File file = new File(instance.getDataFolder(), path);
 
-        for (String child : configurations) {
-            File file = new File(this.getDataFolder(), child);
-
-            if (!file.getParentFile().exists()) {
-                file.getParentFile().mkdirs();
-            }
-
-            if (!file.exists()) {
-                saveResource(child, false);
-            }
-
-            String key = child.replaceAll(".*/|\\.yml", "");
-
-            Main.configurations.put(key, YamlConfiguration.loadConfiguration(file));
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
         }
+
+        if (!file.exists()) {
+            Main.getInstance().saveResource(path, false);
+        }
+
+        return YamlConfiguration.loadConfiguration(file);
     }
 
-
-    public static YamlConfiguration getConfiguration(String key) {
-        return configurations.get(key);
+    public static Connection createConnection() throws SQLException {
+        YamlConfiguration config = getConfig("server/db.yml");
+        return DriverManager.getConnection(config.getString("url"), config.getString("user"), config.getString("password"));
     }
 
     public static JavaPlugin getInstance() {
@@ -161,11 +167,7 @@ public class Main extends JavaPlugin {
         return econ;
     }
 
-    public static CoreProvider getCore() {
-        return core;
-    }
-
-    public static @NotNull String getPrefix() {
-        return LegacyComponentSerializer.legacySection().serialize(MiniMessage.miniMessage().deserialize("<#28AFFB>S<#2E8EFD>M<#336CFF>P"));
+    public static Gemstones getGems() {
+        return gems;
     }
 }

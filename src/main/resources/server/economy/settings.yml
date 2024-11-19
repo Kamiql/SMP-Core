@@ -1,0 +1,17 @@
+economy:
+  vault:
+    enabled: true
+    name: "SMP-Economy"
+    currency-symbol: "€"
+    fractional-digits: 2
+
+  gemstones:
+    enabled: true
+    name: "SMP-Gemstones"
+    currency-symbol: "💎"
+    fractional-digits: 0
+
+database:
+  url: jdbc:mysql://localhost:3306/economydb
+  user: root
+  password: VNk0qMp0ph79OR

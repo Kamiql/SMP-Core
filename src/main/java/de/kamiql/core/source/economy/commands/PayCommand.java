@@ -1,7 +1,10 @@
 package de.kamiql.core.source.economy.commands;
 
+import com.mojang.brigadier.builder.RequiredArgumentBuilder;
 import de.kamiql.Main;
-import de.kamiql.core.util.language.i18n.I18n;
+import de.kamiql.core.source.economy.custom.gemstones.econ.Gemstones;
+import de.kamiql.i18n.core.source.I18n;
+import io.papermc.paper.command.brigadier.CommandSourceStack;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -11,88 +14,159 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class PayCommand implements TabExecutor {
     private final Economy econ = Main.getEcon();
+    private final Gemstones gems = Main.getGems();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) {
-            return false;
-        }
+        if (sender instanceof Player player) {
+            if (player.hasPermission("smp-core.commands.economy.pay")) {
 
-        if (args.length != 2) {
-            new I18n.Builder("invalid_usage", player).hasPrefix(true).build().sendMessageAsComponent();
-            return false;
-        }
+                Player target = Bukkit.getPlayer(args[0]);
+                if (target == null) {
+                    new I18n.Builder("commands.economy.pay_command.target_not_found", player)
+                            .hasPrefix(true)
+                            .withPlaceholder("PLAYER", args[0])
+                            .build()
+                            .sendMessageAsComponent();
+                    return false;
+                }
 
-        // Target player
-        Player targetPlayer = Bukkit.getPlayerExact(args[0]);
-        if (targetPlayer == null) {
-            new I18n.Builder("player_must_be_online", player)
-                    .hasPrefix(true)
-                    .withPlaceholder("PLAYER", args[0])
-                    .build()
-                    .sendMessageAsComponent();
-            return true;
-        }
+                if (args.length < 3) {
+                    new I18n.Builder("misc.invalid_usage", player)
+                            .hasPrefix(true)
+                            .withPlaceholder("USAGE", "/pay <player> <amount> <gems/money>")
+                            .build()
+                            .sendMessageAsComponent();
+                    return false;
+                }
 
-        double amount;
-        try {
-            amount = Double.parseDouble(args[1]);
-            if (amount <= 0) {
-                new I18n.Builder("invalid_amount", player)
+                double amount = Double.parseDouble(args[1]);
+
+                switch (args[2].toLowerCase()) {
+                    case "gems" -> {
+                        if (amount > 0) {
+                            if (econ.has(player, amount)) {
+                                if (econ.hasAccount(target) || econ.hasAccount(player)) {
+                                    econ.withdrawPlayer(player, amount);
+                                    econ.depositPlayer(target, amount);
+
+                                    new I18n.Builder("commands.economy.pay_command.success", player)
+                                            .hasPrefix(true)
+                                            .withPlaceholder("AMOUNT", String.valueOf(amount))
+                                            .withPlaceholder("PLAYER", target.getName())
+                                            .withPlaceholder("TYPE", "gems")
+                                            .build()
+                                            .sendMessageAsComponent();
+
+                                    new I18n.Builder("commands.economy.pay_command.success_sender", target)
+                                            .hasPrefix(true)
+                                            .withPlaceholder("AMOUNT", String.valueOf(amount))
+                                            .withPlaceholder("PLAYER", player.getName())
+                                            .withPlaceholder("TYPE", "gems")
+                                            .build()
+                                            .sendMessageAsComponent();
+                                } else {
+                                    new I18n.Builder("commands.economy.pay_command.no_account", player)
+                                            .hasPrefix(true)
+                                            .withPlaceholder("PLAYER", target.getName())
+                                            .build()
+                                            .sendMessageAsComponent();
+                                }
+                            } else {
+                                new I18n.Builder("commands.economy.pay_command.not_enough_money", player)
+                                        .hasPrefix(true)
+                                        .build()
+                                        .sendMessageAsComponent();
+                            }
+                        } else {
+                            new I18n.Builder("commands.economy.pay_command.insufficient_amount", player)
+                                    .hasPrefix(true)
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+                    }
+
+                    case "money" -> {
+                        if (amount > 0) {
+                            if (gems.has(amount, player)) {
+                                if (gems.hasAccount(target) || gems.hasAccount(player)) {
+                                    gems.withdraw(amount, player);
+                                    gems.deposit(amount, target);
+
+                                    new I18n.Builder("commands.economy.pay_command.success", player)
+                                            .hasPrefix(true)
+                                            .withPlaceholder("AMOUNT", String.valueOf(amount))
+                                            .withPlaceholder("PLAYER", target.getName())
+                                            .withPlaceholder("TYPE", "money")
+                                            .build()
+                                            .sendMessageAsComponent();
+
+                                    new I18n.Builder("commands.economy.pay_command.success_sender", target)
+                                            .hasPrefix(true)
+                                            .withPlaceholder("AMOUNT", String.valueOf(amount))
+                                            .withPlaceholder("PLAYER", player.getName())
+                                            .withPlaceholder("TYPE", "money")
+                                            .build()
+                                            .sendMessageAsComponent();
+                                } else {
+                                    new I18n.Builder("commands.economy.pay_command.no_account", player)
+                                            .hasPrefix(true)
+                                            .withPlaceholder("PLAYER", target.getName())
+                                            .build()
+                                            .sendMessageAsComponent();
+                                }
+                            } else {
+                                new I18n.Builder("commands.economy.pay_command.not_enough_money", player)
+                                        .hasPrefix(true)
+                                        .build()
+                                        .sendMessageAsComponent();
+                            }
+                        } else {
+                            new I18n.Builder("commands.economy.pay_command.insufficient_amount", player)
+                                    .hasPrefix(true)
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+                    }
+
+                    default -> {
+                        new I18n.Builder("misc.invalid_usage", player)
+                                .hasPrefix(true)
+                                .withPlaceholder("USAGE", "/pay <player> <amount> <gems/money>")
+                                .build()
+                                .sendMessageAsComponent();
+                    }
+                }
+            } else {
+                new I18n.Builder("misc.no_permission", player)
                         .hasPrefix(true)
+                        .withPlaceholder("PERMISSION", "smp-core.commands.economy.pay")
                         .build()
                         .sendMessageAsComponent();
-                return true;
             }
-        } catch (NumberFormatException e) {
-            new I18n.Builder("invalid_amount", player)
-                    .hasPrefix(true)
-                    .build()
-                    .sendMessageAsComponent();
-            return true;
         }
-
-        if (!econ.has(player, amount)) {
-            new I18n.Builder("insufficient_funds", player)
-                    .hasPrefix(true)
-                    .build()
-                    .sendMessageAsComponent();
-            return true;
-        }
-
-        econ.withdrawPlayer(player, amount);
-        econ.depositPlayer(targetPlayer, amount);
-
-        new I18n.Builder("payment_sent", player)
-                .hasPrefix(true)
-                .withPlaceholder("PLAYER", targetPlayer.getName())
-                .withPlaceholder("AMOUNT", amount)
-                .build()
-                .sendMessageAsComponent();
-
-        new I18n.Builder("payment_received", targetPlayer)
-                .hasPrefix(true)
-                .withPlaceholder("PLAYER", player.getName())
-                .withPlaceholder("AMOUNT", amount)
-                .build()
-                .sendMessageAsComponent();
-
-        return true;
+        return false;
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            return Bukkit.getOnlinePlayers().stream()
+            Bukkit.getOnlinePlayers().stream()
                     .map(Player::getName)
                     .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
-                    .collect(Collectors.toList());
+                    .forEach(completions::add);
+        } else if (args.length == 2) {
+            completions.add("<amount>");
+        } else if (args.length == 3) {
+            completions.add("gems");
+            completions.add("money");
         }
-        return List.of();
+        return completions;
     }
 }

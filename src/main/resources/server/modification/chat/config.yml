@@ -1,0 +1,15 @@
+# Placeholders:
+# {message} - the chat message
+# {name} - the player's name
+# {displayname} - the player's display name / nickname
+# {world} - the world name of the player's current world
+# {prefix} - the player's highest priority prefix
+# {suffix} - the player's highest priority suffix
+
+chat-format: "{prefix} {username-color}{name} {suffix}<white>: {message-color}{message}"
+
+formatter:
+  placeholder:
+    item_showcase:
+      enabled: true
+      key: "[item]"

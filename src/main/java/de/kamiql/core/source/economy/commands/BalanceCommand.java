@@ -1,8 +1,7 @@
 package de.kamiql.core.source.economy.commands;
 
 import de.kamiql.Main;
-import de.kamiql.core.util.language.i18n.I18n;
-import net.milkbowl.vault.economy.Economy;
+import de.kamiql.i18n.core.source.I18n;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -12,63 +11,105 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BalanceCommand implements TabExecutor {
-    private final Economy econ = Main.getEcon();
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!(sender instanceof Player player)) {
-            return false;
-        }
 
-        // Own balance if no args
-        if (args.length == 0) {
-            double balance = econ.getBalance(player);
-            new I18n.Builder("own_balance", player)
-                    .hasPrefix(true)
-                    .withPlaceholder("BALANCE", balance)
-                    .build()
-                    .sendMessageAsComponent();
-            return true;
-        }
+        if (sender instanceof Player player) {
+            if (player.hasPermission("")) {
 
-        // Other player's balance if one argument is provided
-        if (args.length == 1) {
-            OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(args[0]);
-            if (!targetPlayer.hasPlayedBefore()) {
-                new I18n.Builder("player_not_found", player)
+                if (args.length == 1) {
+                    switch (args[0].toLowerCase()) {
+                        case "money" -> {
+                            new I18n.Builder("commands.economy.balance_command.money_self", player)
+                                    .hasPrefix(true)
+                                    .withPlaceholder("AMOUNT", Main.getEcon().getBalance(player))
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+
+                        case "gems" -> {
+                            new I18n.Builder("commands.economy.balance_command.gems_self", player)
+                                    .hasPrefix(true)
+                                    .withPlaceholder("AMOUNT", Main.getGems().getBalance(player))
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+
+                        default -> {
+                            new I18n.Builder("misc.invalid_usage", player)
+                                    .hasPrefix(true)
+                                    .withPlaceholder("ALIAS", "/balance <money/gems> [player]")
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+                    }
+
+                } else if (args.length == 2) {
+                    OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+
+                    switch (args[0].toLowerCase()) {
+                        case "money" -> {
+                            new I18n.Builder("commands.economy.balance_command.money_other", player)
+                                    .hasPrefix(true)
+                                    .withPlaceholder("AMOUNT", Main.getEcon().getBalance(target))
+                                    .withPlaceholder("PLAYER", target.getName())
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+
+                        case "gems" -> {
+                            new I18n.Builder("commands.economy.balance_command.gems_other", player)
+                                    .hasPrefix(true)
+                                    .withPlaceholder("AMOUNT", Main.getEcon().getBalance(target))
+                                    .withPlaceholder("PLAYER", target.getName())
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+
+                        default -> {
+                            new I18n.Builder("misc.invalid_usage", player)
+                                    .hasPrefix(true)
+                                    .withPlaceholder("ALIAS", "/balance <money/gems> [player]")
+                                    .build()
+                                    .sendMessageAsComponent();
+                        }
+                    }
+                } else {
+                    new I18n.Builder("misc.invalid_usage", player)
+                            .hasPrefix(true)
+                            .withPlaceholder("ALIAS", "/balance <money/gems> [player]")
+                            .build()
+                            .sendMessageAsComponent();
+                }
+
+            } else {
+                new I18n.Builder("misc.no_permission", player)
                         .hasPrefix(true)
-                        .withPlaceholder("PLAYER", args[0])
+                        .withPlaceholder("PERMISSION", "")
                         .build()
                         .sendMessageAsComponent();
-                return true;
             }
-
-            double balance = econ.getBalance(targetPlayer);
-            new I18n.Builder("other_balance", player)
-                    .hasPrefix(true)
-                    .withPlaceholder("PLAYER", targetPlayer.getName())
-                    .withPlaceholder("BALANCE", balance)
-                    .build()
-                    .sendMessageAsComponent();
-            return true;
         }
 
-        new I18n.Builder("invalid_usage", player).hasPrefix(true).build().sendMessageAsComponent();
         return false;
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        List<String> completions = new ArrayList<>();
         if (args.length == 1) {
-            return Bukkit.getOnlinePlayers().stream()
-                    .map(Player::getName)
-                    .filter(name -> name.toLowerCase().startsWith(args[0].toLowerCase()))
-                    .collect(Collectors.toList());
+            completions.add("money");
+            completions.add("gems");
+        } else if (args.length == 2) {
+            Bukkit.getOnlinePlayers().stream()
+                .map(Player::getName)
+                .filter(name -> name.toLowerCase().startsWith(args[1].toLowerCase()))
+                .forEach(completions::add);
         }
-        return List.of();
+        return completions;
     }
 }

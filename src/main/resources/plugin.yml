@@ -20,38 +20,48 @@ dependencies:
       required: false
 
 commands:
-  balance:
-    description: "Take a look at your or other balances!"
-    permission: "smp-core.commands.balance"
-    aliases: ["bal", "kontostand"]
-
-  pay:
-    description: "Pay money to others!"
-    permission: "smp-core.commands.pay"
-
-  invsee:
-    description: "See player inventorys!"
-    permission: "smp-core.commands.invsee"
-    aliases: ["inventorysee", "isee"]
+  workutil:
+    description: "Work util commands"
+    aliases: ["tools"]
 
   ec:
-    description: "See player enderchests!"
-    permission: "smp-core.commands.ec"
-    aliases: ["enderchest"]
+    description: "View other player´s enderchest"
+    aliases: ["enderchest", "ec"]
 
-  clan:
-    permission: "smp-core.commands.clan"
+  invsee:
+    description: "View another player's inventory"
+    aliases: ["inventorysee", "is"]
+
+  pay:
+    description: "Pay someone"
+    aliases:
+      - "überweisen"
+
+  balTop:
+    description: "Economy Leaderboard"
+    aliases:
+      - "baltop"
+      - "balanceTop"
+
+  eco:
+    description: "Economy command"
+    aliases:
+      - "economy"
 
   rename:
     description: "Rename items!"
-    permission: "smp-core.commands.rename"
-    aliases: ["renameitem", "umbenenn"]
+    aliases: ["renameitem", "umbenennen"]
 
   sign:
     description: "Sign items!"
-    permission: "smp-core.commands.sign"
     aliases: ["signieren"]
 
+  balance:
+    description: "View your and others balance!"
+    aliases: ["bal"]
+
   vanish:
-    permission: "smp-core.commands.vanish"
+    description: "Vanish command"
+    aliases: ["v"]
+
 load: POSTWORLD

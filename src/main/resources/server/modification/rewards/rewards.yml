@@ -1,0 +1,32 @@
+# Rewards Tutorial
+
+# Wildcards
+# ---------
+# You can use the following wildcards in your commands:
+#   %player%: Targets the player who received the reward
+#   %all%: Targets all players
+#   %random%: Targets a random player
+
+# Example Commands
+# ---------------
+# Give 10 diamonds to the player who received the reward:
+#   - "give %player% diamond 10"
+
+# Remember to replace the wildcards with the actual command syntax
+# when writing your own commands.
+
+enabled: true
+
+rewards:
+  120:
+    enabled: true
+    custom:
+      rank: "default"
+      permissions:
+        - "test.permission.1"
+        - "test.permission.2"
+      commands:
+        - "give %player% diamond 10"
+        - "xp %player% add 10 level"
+    money: 250.0
+    gems: 250.0
